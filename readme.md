@@ -40,29 +40,30 @@ Blinkos는 사용자가 자신의 건강을 체계적으로 관리하고, 다른
 ## 📂 프로젝트 구조
 
 ```
-C:/Users/gy990/OneDrive/GYP/13.Spring/springProject/springframework/works/springProject1
+springProject1
 ├── .settings/               # Eclipse IDE 설정
 ├── src/
 │   ├── main/
 │   │   ├── java/com/spring/springProject1/
 │   │   │   ├── HomeController.java # 메인 컨트롤러
 │   │   │   ├── ad/                   # 광고 관련 기능 (예: AdController.java)
-│   │   │   ├── admin/                # 관리자 기능 (AdminController, AdminService, dao)
+│   │   │   ├── admin/                # 관리자 기능 (AdminController, AdminService, AdminServiceImpl, dao)
 │   │   │   ├── api/                  # 외부 API 연동 (ApiController.java)
-│   │   │   ├── board/                # 게시판 기능 (BoardController, Service, dao, Vo)
-│   │   │   ├── common/               # 공통 유틸, VO, 스케줄러 등
+│   │   │   ├── board/                # 게시판 기능 (BoardController, BoardService, BoardServiceImpl, dao, 다수의 Vo 클래스)
+│   │   │   ├── common/               # 공통 유틸, VO, 스케줄러, 암호화 등
 │   │   │   ├── expert/               # 전문가 피드백 기능 (ExpertController.java)
-│   │   │   ├── rec/                  # 건강 기록/추천 기능 (RecController, Service, dao, vo)
-│   │   │   └── user/                 # 사용자 관리 (UserController, Service, dao, Vo)
+│   │   │   ├── rec/                  # 건강 기록/추천 기능 (RecController, RecService, RecServiceImpl, dao, vo, wrapper)
+│   │   │   └── user/                 # 사용자 관리 (UserController, UserService, UserServiceImpl, UserVo, dao)
 │   │   ├── resources/
+│   │   │   ├── application.properties # 애플리케이션 설정
 │   │   │   ├── log4j.xml             # Log4j 로깅 설정
-│   │   │   └── mappers/              # MyBatis 매퍼 XML (admin, board, rec, user)
+│   │   │   └── mappers/              # MyBatis 매퍼 XML (adminMapper, boardMapper, recMapper, userMapper)
 │   │   └── webapp/
-│   │       ├── resources/            # 정적 리소스 (css, js, img, ckeditor)
+│   │       ├── resources/            # 정적 리소스 (css, js, img, ckeditor, data)
 │   │       └── WEB-INF/
 │   │           ├── spring/
 │   │           │   ├── root-context.xml    # Spring 루트 컨텍스트 설정
-│   │           │   └── appServlet/       # 서블릿 컨텍스트 설정 (servlet-context.xml)
+│   │           │   └── appServlet/         # 서블릿 컨텍스트 설정 (servlet-context.xml, servlet-interceptor.xml)
 │   │           ├── views/                # JSP 뷰 파일 (각 기능별 폴더로 구성)
 │   │           │   ├── ad/
 │   │           │   ├── admin/
