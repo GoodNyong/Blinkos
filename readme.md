@@ -76,7 +76,6 @@ springProject1
 │   │           │   └── user/
 │   │           └── web.xml               # 웹 애플리케이션 배포 서술자
 │   └── test/                   # 테스트 코드
-│       ├── java/
 │       └── resources/
 ├── target/                    # 빌드 결과물
 ├── .classpath                 # Eclipse 클래스패스 설정
