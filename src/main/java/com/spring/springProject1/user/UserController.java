@@ -50,11 +50,8 @@ public class UserController {
 			ra.addFlashAttribute("url", "/");
 			return "redirect:/message/error";
 		}
-	    System.out.println("userId : " + userId);
 	    double exerciseRate = recService.getExerciseGoalAchievementRate(userId);
-	    System.out.println("exerciseRate : " + exerciseRate);
 	    double mealRate = recService.getMealGoalAchievementRate(userId);
-	    System.out.println("mealRate : " + mealRate);
 	    
 	    model.addAttribute("exerciseRate", (int) exerciseRate);
 	    model.addAttribute("mealRate", (int) mealRate);
@@ -117,7 +114,7 @@ public class UserController {
 	@RequestMapping(value = "/userLogin", method = RequestMethod.GET)
 	public String userLoginGet(HttpServletRequest request) {
 		// 쿠키처리로 저장된 아이디를 가져와서 view에 보내주기
-	  Cookie[] cookies = request.getCookies();
+		Cookie[] cookies = request.getCookies();
 
 		if(cookies != null) {
 			for(int i=0; i<cookies.length; i++) {
@@ -127,7 +124,6 @@ public class UserController {
 				}
 			}
 		}
-		
 		return "user/userLogin";
 	}
 	
@@ -193,31 +189,31 @@ public class UserController {
 	  //역할(role) 세션 저장
 	  //List<String> roles = userService.getUserRoles(vo.getUser_id());
 	  //session.setAttribute("sRoles", roles);
-	  
-		// 2. 쿠키
-		if(idSave != null && idSave.equals("on")) {	// 쿠키 저장 처리
-			Cookie cookieEmail = new Cookie("cEmail", email);
-			cookieEmail.setPath("/");
-			cookieEmail.setMaxAge(60*60*24*7);	// 단위:초... 쿠키 만료시간을 7일로 지정
-			response.addCookie(cookieEmail);
-		}
-		else {	// 쿠키 삭제처리
+
+	  // 2. 쿠키
+	  if(idSave != null && idSave.equals("on")) {	// 쿠키 저장 처리
+		  Cookie cookieEmail = new Cookie("cEmail", email);
+		  cookieEmail.setPath("/");
+		  cookieEmail.setMaxAge(60*60*24*7);	// 단위:초... 쿠키 만료시간을 7일로 지정
+		  response.addCookie(cookieEmail);
+	  }
+	  else {	// 쿠키 삭제처리
 		  Cookie[] cookies = request.getCookies();
-			if(cookies != null) {
-				for(int i=0; i<cookies.length; i++) {
-					if(cookies[i].getName().equals("cEmail")) {
-						cookies[i].setPath("/");
-						cookies[i].setMaxAge(0);
-						response.addCookie(cookies[i]);
-						break;
-					}
-				}
-			}	  
-		}
-		return "redirect:/message/userLoginOk?username=" + URLEncoder.encode(vo.getUsername(), "UTF-8");
-		//한글값을 넘길 거라 encode 및 throws 필수
+		  if(cookies != null) {
+			  for(int i=0; i<cookies.length; i++) {
+				  if(cookies[i].getName().equals("cEmail")) {
+					  cookies[i].setPath("/");
+					  cookies[i].setMaxAge(0);
+					  response.addCookie(cookies[i]);
+					  break;
+				  }
+			  }
+		  }	  
+	  }
+	  return "redirect:/message/userLoginOk?username=" + URLEncoder.encode(vo.getUsername(), "UTF-8");
+	  //한글값을 넘길 거라 encode 및 throws 필수
 	}
-	
+
 	// 로그아웃 처리
 	@RequestMapping(value = "/userLogout", method = RequestMethod.GET)
 	public String userLogoutGet(HttpSession session) {
@@ -228,7 +224,7 @@ public class UserController {
 	
 	/*
 	public boolean verifyRecaptcha(String token) {
-	  String secretKey = "6LccsBwrAAAAACNU8SQDxsZFv5brs4rwKRHsG7To";
+	  String secretKey = System.getenv("RECAPTCHA_SECRET");
 	  String apiUrl = "https://www.google.com/recaptcha/api/siteverify";
 
 	  try {
@@ -521,6 +517,7 @@ public class UserController {
 	   else return "redirect:/message/userUpdateNo";
 	}
 	
+	// 회원정보페이지
 	@RequestMapping(value = "/userPage", method = RequestMethod.GET)
 	public String userPageGet(HttpSession session, Model model) {
 	    Integer user_id = (Integer) session.getAttribute("loginUser");

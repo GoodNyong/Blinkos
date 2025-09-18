@@ -28,14 +28,14 @@
     <form method="post" action="${ctp}/user/userLogin">
       <div class="mb-3">
         <label for="email" class="form-label">이메일</label>
-        <input type="text" name="email" id="email" class="form-control" required placeholder="example@email.com" />
+        <input type="text" name="email" id="email" class="form-control" value="" required placeholder="example@email.com" />
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">비밀번호</label>
-        <input type="password" name="password" id="password" class="form-control" required />
+        <input type="password" name="password" id="password" value="" class="form-control" required />
       </div>
       <div class="form-check mb-3">
-        <input type="checkbox" name="idSave" class="form-check-input" id="idSave" value="1" />
+        <input type="checkbox" name="idSave" class="form-check-input" id="idSave" value="on" />
         <label class="form-check-label" for="idSave">이메일 저장</label>
       </div>
       <div class="d-grid gap-2 mb-3">

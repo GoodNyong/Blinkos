@@ -48,7 +48,7 @@
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 
 <script>
-var loginUserId = "${sessionScope.loginUser.user_id}";
+var loginUserId = "${sessionScope.sUser.user_id}";
 
 function getRowIndex() {
 	return document.querySelectorAll('#recordTableBody tr').length;

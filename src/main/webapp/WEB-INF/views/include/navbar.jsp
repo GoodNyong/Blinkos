@@ -25,14 +25,14 @@
 		<!-- 로그인/로그아웃 버튼(모바일) + 햄버거 버튼-->
 		<div class="d-flex d-lg-none align-items-center gap-2">
 			<c:choose>
-				<c:when test="${not empty sessionScope.sUser}">
-					<span class="navbar-text me-3"> 👋 ${sessionScope.sUser.username}님 </span>
-					<a class="btn btn-outline-secondary btn-sm me-2" href="${pageContext.request.contextPath}/user/userPage">마이페이지</a>
-					<a class="btn btn-primary btn-sm" href="${pageContext.request.contextPath}/user/userLogout">로그아웃</a>
+				<c:when test="${not empty sessionScope.loginUser}">
+					<span class="navbar-text me-3"> 👋 ${sUsername}님 </span>
+					<a class="btn btn-outline-secondary btn-sm me-2" href="${ctp}/user/userPage">마이페이지</a>
+					<a class="btn btn-primary btn-sm" href="${ctp}/user/userLogout">로그아웃</a>
 				</c:when>
 				<c:otherwise>
-					<a class="btn btn-outline-primary me-2" href="${pageContext.request.contextPath}/user/userLogin">로그인</a>
-					<a class="btn btn-primary" href="${pageContext.request.contextPath}/user/userJoin">회원가입</a>
+					<a class="btn btn-outline-primary me-2" href="${ctp}/user/userLogin">로그인</a>
+					<a class="btn btn-primary" href="${ctp}/user/userJoin">회원가입</a>
 				</c:otherwise>
 			</c:choose>
 
@@ -47,8 +47,8 @@
 		<div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarMenu">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<%-- <c:if test="${not empty sessionScope.user}"> --%>
-				<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/rec/report">리포트</a></li>
-				<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/content/list">콘텐츠</a></li>
+				<li class="nav-item"><a class="nav-link" href="${ctp}/rec/report">리포트</a></li>
+				<li class="nav-item"><a class="nav-link" href="${ctp}/content/list">콘텐츠</a></li>
 
 				<!-- 🔽 새 드롭다운: 기록 관리 -->
 				<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="recordDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 기록 관리 </a>
@@ -80,10 +80,9 @@
                 </li>
                 
 				<!-- 🔹 피드백 요청 현황 (단일 항목 또는 전문가 메뉴와 연계) -->
-				<li class="nav-item"><a class="nav-link" href="${ctp}/expert/feedbackList">피드백 현황</a></li>
-				<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/expert/feedbackList">피드백</a></li>
-				<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/adminMain">관리자</a></li>
-				<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/ad/dashboard">광고</a></li>
+				<li class="nav-item"><a class="nav-link" href="${ctp}/expert/feedbackList">피드백</a></li>
+				<li class="nav-item"><a class="nav-link" href="${ctp}/admin/adminMain">관리자</a></li>
+				<li class="nav-item"><a class="nav-link" href="${ctp}/ad/dashboard">광고</a></li>
 			</ul>
 		</div>
 		

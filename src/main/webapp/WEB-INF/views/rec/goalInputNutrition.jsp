@@ -15,7 +15,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<form method="post" action="${ctp}/rec/goalInputNutritionOk" class="needs-validation" novalidate>
-				<input type="hidden" name="user_id" value="${sessionScope.loginUser.user_id}" />
+				<input type="hidden" name="user_id" value="${sessionScope.sUser.user_id}" />
 				<input type="hidden" name="set_by" value="1" />
 
 				<!-- 목표 유형 -->

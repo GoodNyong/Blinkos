@@ -20,7 +20,7 @@
 <header class="text-center py-5 bg-light">
   <h1 class="display-4 fw-bold">Professor Blinkos와 함께<br>건강 루틴을 마법처럼!</h1>
   <p class="lead">운동, 식단, 분석, 피드백까지 한 번에.</p>
-  <a href="${pageContext.request.contextPath}/user/main" class="btn btn-lg btn-primary mt-3">지금 시작하기</a>
+  <a href="${pageContext.request.contextPath}/user/userLogin" class="btn btn-lg btn-primary mt-3">지금 시작하기</a>
 </header>
 
 <!-- 특징 목록 -->
@@ -70,7 +70,7 @@
 <!-- CTA -->
 <section class="text-center py-5 bg-primary text-white">
   <h2>지금 바로 Blinkos를 시작해보세요!</h2>
-  <a href="${pageContext.request.contextPath}/user/signup" class="btn btn-light btn-lg mt-3">회원가입 하러 가기</a>
+  <a href="${pageContext.request.contextPath}/user/userJoin" class="btn btn-light btn-lg mt-3">회원가입 하러 가기</a>
 </section>
 
 <!-- 뉴스레터 -->
