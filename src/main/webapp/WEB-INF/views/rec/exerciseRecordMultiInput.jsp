@@ -49,7 +49,7 @@
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 
 <script>
-var loginUserId = "${sessionScope.loginUser.user_id}";
+var loginUserId = "${sessionScope.sUser.user_id}";
 let rowIndex = 0;
 
 function getRowIndex() {
@@ -70,7 +70,7 @@ function addRow() {
 				'<option value="3">사이클링</option>' +
 				'<option value="4">근력 운동</option>' +
 			'</select>' +
-			'<input type="hidden" name="exerciseRecordList[' + currentIndex + '].user_id" value="' + loginUserId + '" />' +
+			/* '<input type="hidden" name="exerciseRecordList[' + currentIndex + '].user_id" value="' + loginUserId + '" />' + */
 		'</td>' +
 		'<td><input type="number" name="exerciseRecordList[' + currentIndex + '].duration_minutes" class="form-control" min="1" required /></td>' +
 		'<td><input type="number" name="exerciseRecordList[' + currentIndex + '].calories_burned" class="form-control" min="0" required /></td>' +

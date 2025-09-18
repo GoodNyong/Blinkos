@@ -18,7 +18,7 @@
 		<div class="col-md-6">
 			<form method="post" action="${ctp}/rec/mealRecordEdit" class="needs-validation" novalidate>
 				<input type="hidden" name="meal_id" value="${record.meal_id}" />
-				<input type="hidden" name="user_id" value="${sessionScope.loginUser.user_id}" />
+				<input type="hidden" name="user_id" value="${sessionScope.sUser.user_id}" />
 				<input type="hidden" name="quantity" id="quantity_hidden" />
 
 				<!-- 음식 선택 -->

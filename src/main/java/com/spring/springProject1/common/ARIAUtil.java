@@ -167,7 +167,7 @@ public class ARIAUtil {
 		if (strHex==null || strHex.equals("")) return "";
 		StringBuffer buf = null;
 		try {
-			String privateKey = "dkaghghkzl@l";
+			String privateKey = System.getenv("ARIA_PRIVATE_KEY");
 			
 			byte[] p;
 			byte[] c;
@@ -191,7 +191,7 @@ public class ARIAUtil {
 	public static String ariaEncrypt(String str) 
 	throws InvalidKeyException, UnsupportedEncodingException {
 		if (str==null || str.equals("")) return "";
-		String privateKey = "dkaghghkzl@l";
+		String privateKey = System.getenv("ARIA_PRIVATE_KEY");
 
 		byte[] p;
 		byte[] c;
@@ -216,7 +216,7 @@ public class ARIAUtil {
 	public static String ariaCharEncrypt(String str, String charset) 
 	throws InvalidKeyException, UnsupportedEncodingException {
 		if (str==null || str.equals("")) return "";
-		String privateKey = "dkaghghkzl@l";
+		String privateKey = System.getenv("ARIA_PRIVATE_KEY");
 		byte[] p;
 		byte[] c;
 		ARIAEngine instance = new ARIAEngine(256, privateKey);
@@ -241,8 +241,8 @@ public class ARIAUtil {
 	throws InvalidKeyException, UnsupportedEncodingException {
 		if (str==null || str.equals("")) return "";
 		String privateKey = "";
-		if(server.equals("regi")) privateKey = "dkaghghkzl@l";
-		else privateKey = "dkaghghkzl@l";
+		if(server.equals("regi")) privateKey = System.getenv("ARIA_PRIVATE_KEY");
+		else privateKey = System.getenv("ARIA_PRIVATE_KEY");
 
 		byte[] p;
 		byte[] c;
@@ -268,7 +268,7 @@ public class ARIAUtil {
 	public static String ariaCharDecrypt(String strHex,  String charset) 
 	throws InvalidKeyException, UnsupportedEncodingException  {
 		if (strHex==null || strHex.equals("")) return "";
-		String privateKey = "dkaghghkzl@l";
+		String privateKey = System.getenv("ARIA_PRIVATE_KEY");
 
 		byte[] p;
 		byte[] c;
@@ -292,8 +292,8 @@ public class ARIAUtil {
 	throws InvalidKeyException, UnsupportedEncodingException  {
 		if (strHex==null || strHex.equals("")) return "";
 		String privateKey = "";
-		if(server.equals("regi")) privateKey = "dkaghghkzl@l";
-		else privateKey = "dkaghghkzl@l";
+		if(server.equals("regi")) privateKey = System.getenv("ARIA_PRIVATE_KEY");
+		else privateKey = System.getenv("ARIA_PRIVATE_KEY");
 		 
 		byte[] p;
 		byte[] c;

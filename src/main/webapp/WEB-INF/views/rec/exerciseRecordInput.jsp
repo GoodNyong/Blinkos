@@ -24,7 +24,7 @@
 		<!-- 입력 폼 -->
 		<div class="col-md-6">
 			<form method="post" class="needs-validation" novalidate>
-				<input type="hidden" name="user_id" value="${sessionScope.loginUser.user_id}" />
+				<%-- <input type="hidden" name="user_id" value="${sessionScope.sUser.user_id}" /> --%>
 
 				<div class="mb-3">
 					<label for="exercise_id" class="form-label">운동 종류</label>

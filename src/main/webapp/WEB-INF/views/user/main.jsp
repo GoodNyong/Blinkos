@@ -8,7 +8,7 @@
 <main class="container mt-4 mb-5">
 	<!-- 페이지 제목 및 인사 -->
 	<div class="mb-4">
-		<h2>🎉 환영합니다, ${sessionScope.user.nickname}님!</h2>
+		<h2>🎉 환영합니다, ${sessionScope.sUsername}님!</h2>
 		<p class="text-muted">오늘도 건강한 루틴을 시작해볼까요?</p>
 	</div>
 
@@ -57,17 +57,17 @@
 			<a href="${ctp}/rec/mealRecordInput" class="btn btn-outline-info w-100 py-3">식단 기록 입력</a>
 		</div>
 		<div class="col-md-4 mb-3">
+			<a href="${ctp}/rec/goalInput" class="btn btn-outline-secondary w-100 py-3">목표 설정</a>
+		</div>
+		<div class="col-md-4 mb-3">
 			<a href="${ctp}/rec/report" class="btn btn-outline-success w-100 py-3">리포트 보기</a>
 		</div>
 		<div class="col-md-4 mb-3">
 			<a href="${ctp}/expert/feedbackRequest" class="btn btn-outline-warning w-100 py-3">피드백 요청</a>
 		</div>
-		<div class="col-md-4 mb-3">
-			<a href="${ctp}/rec/goalInput" class="btn btn-outline-secondary w-100 py-3">목표 설정</a>
-		</div>
-		<div class="col-md-4 mb-3">
+		<%-- <div class="col-md-4 mb-3">
 			<a href="${ctp}/user/notifications" class="btn btn-outline-dark w-100 py-3">알림 확인</a>
-		</div>
+		</div> --%>
 	</section>
 
 </main>

@@ -138,7 +138,7 @@ public class MessageController {
 		}
 
 		
-		
+		// -----------------------------------------------------------------------------------
 		
 		
 		if(msgFlag.equals("userJoinOk")) {
@@ -183,7 +183,7 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("userLogoutOk")) {
 			model.addAttribute("message", "로그아웃되었습니다.");
-			model.addAttribute("url", "user/main");
+			model.addAttribute("url", "/");
 		}
 		else if(msgFlag.equals("reCaptchaNo")) {
 		  model.addAttribute("message", "자동 인증(CAPTCHA)을 통과하지 못했습니다.");

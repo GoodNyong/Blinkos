@@ -17,7 +17,7 @@
 		<!-- 입력 폼 -->
 		<div class="col-md-6">
 			<form method="post" action="${ctp}/rec/goalInputExerciseOk" class="needs-validation" novalidate>
-				<input type="hidden" name="user_id" value="${sessionScope.loginUser.user_id}" /> <input type="hidden" name="set_by" value="1" />
+				<input type="hidden" name="user_id" value="${sessionScope.sUser.user_id}" /> <input type="hidden" name="set_by" value="1" />
 
 				<!-- 운동 종류 -->
 				<div class="mb-3">
