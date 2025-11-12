@@ -99,7 +99,7 @@ public class ARIAUtil {
 		p = new byte[c.length];
 		instance.decrypt(c, p, p.length);
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(new String(p));
 
 		return buf.toString().trim();
@@ -151,7 +151,7 @@ public class ARIAUtil {
 	@SuppressWarnings("unused")
 	private static String makeMasterKey(String str) {
 		String appendStr = "Naravision KebiPortal Solution";
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(str).append(appendStr);
 
 		return buf.substring(0,32);
@@ -165,7 +165,7 @@ public class ARIAUtil {
 	throws InvalidKeyException, UnsupportedEncodingException  {
 		String originalData = strHex;
 		if (strHex==null || strHex.equals("")) return "";
-		StringBuffer buf = null;
+		StringBuilder buf = null;
 		try {
 			String privateKey = System.getenv("ARIA_PRIVATE_KEY");
 			
@@ -177,11 +177,11 @@ public class ARIAUtil {
 			p = new byte[c.length];
 			instance.decrypt(c, p, p.length);
 			
-			buf = new StringBuffer();
+			buf = new StringBuilder();
 			buf.append(new String(p));
 			return buf.toString().trim();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// Failed to decrypt, return original data
 			return originalData;
 		}
 	}
@@ -278,7 +278,7 @@ public class ARIAUtil {
 		p = new byte[c.length];
 		instance.decrypt(c, p, p.length);
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(new String(p,charset));
 
 		return buf.toString().trim();
@@ -303,7 +303,7 @@ public class ARIAUtil {
 		p = new byte[c.length];
 		instance.decrypt(c, p, p.length);
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(new String(p,charset));
 
 		return buf.toString().trim();
@@ -328,7 +328,7 @@ public class ARIAUtil {
 			return null; 
 		} 
 
-		StringBuffer sb = new StringBuffer(ba.length * 2); 
+		StringBuilder sb = new StringBuilder(ba.length * 2); 
 		String hexNumber; 
 		for (int x = 0; x < ba.length; x++) { 
 			hexNumber = "0" + Integer.toHexString(0xff & ba[x]); 
