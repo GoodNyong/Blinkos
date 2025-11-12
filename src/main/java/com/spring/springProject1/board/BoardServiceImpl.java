@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -20,6 +22,9 @@ import com.spring.springProject1.common.CommonDateTimeFormatter;
 
 @Service
 public class BoardServiceImpl implements BoardService {
+
+	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
+
 	/*
 	 * 처리 로직이 많다 (ex. 파일 저장, 반복문, 조건 분기, 예외 처리 등) ✔️ 반드시 ServiceImpl에 둬야 함 단순한 DB
 	 * 작업만 수행 (ex. 아이디 중복 체크, 게시글 수 count 등) ✔️ Controller → DAO 바로 연결해도 무방 다른 도메인과
@@ -86,30 +91,27 @@ public class BoardServiceImpl implements BoardService {
         File origFile = new File(origFilePath);
         File copyFile = new File(copyFilePath);
 
-        System.out.println("복사 시도: 원본 파일 경로 = " + origFile.getAbsolutePath());
-        System.out.println("복사 시도: 복사 대상 파일 경로 = " + copyFile.getAbsolutePath());
+        logger.debug("File copy attempt - source: {}, target: {}", origFile.getAbsolutePath(), copyFile.getAbsolutePath());
 
         if(!origFile.exists()) {
-            System.out.println("❗ 복사 실패: 원본 파일이 존재하지 않습니다!");
+            logger.warn("File copy failed - source file does not exist: {}", origFile.getAbsolutePath());
             return;
         }
 
-        FileInputStream fis = new FileInputStream(origFilePath);
-        FileOutputStream fos = new FileOutputStream(copyFilePath);
+        try (FileInputStream fis = new FileInputStream(origFilePath);
+             FileOutputStream fos = new FileOutputStream(copyFilePath)) {
 
-        byte[] buffer = new byte[2048];
-        int length;
-        while((length = fis.read(buffer)) != -1) {
-            fos.write(buffer, 0, length);
+            byte[] buffer = new byte[2048];
+            int length;
+            while((length = fis.read(buffer)) != -1) {
+                fos.write(buffer, 0, length);
+            }
+            fos.flush();
         }
-        fos.flush();
-        fis.close();
-        fos.close();
 
-        System.out.println("✅ 복사 성공: " + copyFile.getAbsolutePath());
+        logger.info("File copy successful: {}", copyFile.getAbsolutePath());
     } catch (Exception e) {
-        System.out.println("❗ 복사 중 예외 발생: " + e.getMessage());
-        e.printStackTrace();
+        logger.error("File copy failed - exception occurred: {}", e.getMessage(), e);
     }
 }
 
@@ -127,7 +129,7 @@ public class BoardServiceImpl implements BoardService {
 	    int position = 18;
 	    
 	    if(content.indexOf("src=\"/") == -1) {
-	    	System.out.println("여기서 문제임");
+	    	logger.debug("No image source found in content");
 	    	return;
 	    }
 	    
@@ -147,10 +149,10 @@ public class BoardServiceImpl implements BoardService {
 	          imgFile = imgFile.substring(imgFile.lastIndexOf("/") + 1);
 	      }
 
-	      System.out.println("[while 반복] 수정된 imgFile: " + imgFile);
+	      logger.debug("Processing image file: {}", imgFile);
 
 	      File file = new File(realPath, imgFile);
-	      System.out.println("[while 반복] 파일 존재 여부: " + file.exists());
+	      logger.debug("File exists: {}", file.exists());
 
 	      BoardFileVo fvo = new BoardFileVo();
 	      fvo.setBoard_id(board_id);
@@ -161,7 +163,7 @@ public class BoardServiceImpl implements BoardService {
 	          fvo.setFile_size((int) file.length());
 	          fvo.setFile_type(Files.probeContentType(file.toPath()));
 	      } catch (Exception e) {
-	          e.printStackTrace();
+	          logger.error("Failed to get file metadata: {}", e.getMessage(), e);
 	      }
 
 	      boardDao.setBoardFile(fvo);
@@ -326,19 +328,3 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 }
-	
-	
-	
-	
-	
-	
-	/*
-	 * @Override public int setBoardInput(BoardVo vo) { return
-	 * boardDao.setBoardInput(vo); }
-	 * 
-	 * @Override public int setBoardFilesInput(int board_id, List<MultipartFile>
-	 * files, String uploadPath) { for(MultipartFile file : files) { if(!file.is) }
-	 * }
-	 */
-	
-

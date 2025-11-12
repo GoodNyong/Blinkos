@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -32,7 +34,9 @@ import com.spring.springProject1.rec.RecService;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
 	@Autowired
 	UserService userService;
 	
@@ -41,7 +45,23 @@ public class UserController {
 
 	@Autowired
 	private RecService recService;
-	
+
+	/**
+	 * Helper method to encrypt password using SHA-256 and ARIA
+	 * @param password Plain text password
+	 * @return Encrypted password, or null if encryption fails
+	 */
+	private String encryptPassword(String password) {
+		try {
+			SecurityUtil security = new SecurityUtil();
+			String shaPassword = security.encryptSHA256(password);
+			return ARIAUtil.ariaEncrypt(shaPassword);
+		} catch (Exception e) {
+			logger.error("Password encryption failed", e);
+			return null;
+		}
+	}
+
 	@GetMapping("/main")
 	public String mainPageGet(HttpSession session, Model model, RedirectAttributes ra) {
 		Integer userId = (Integer) session.getAttribute("loginUser"); UserVo user = userService.getUserByUser_id(userId);
@@ -68,8 +88,8 @@ public class UserController {
 	// user 회원가입 처리
 	@RequestMapping(value = "/userJoin", method = RequestMethod.POST)
 	public String userJoinPost(UserVo vo, HttpSession session) {
-		
-		System.out.println("vo : " + vo);
+
+		logger.info("User join attempt: {}", vo);
 		
 	  // 1. 이메일 인증 여부 확인
 	  String sessionCode = (String) session.getAttribute("sEmailCode");
@@ -83,19 +103,15 @@ public class UserController {
 	  if (userService.getUsernameCheck(vo.getUsername()) != null) {
 	    return "redirect:/message/usernameCheckNo";
 	  }
-	  
-	  
+
+
+
 	  // 3. 비밀번호 암호화 (SHA-256 + ARIA)
-	  SecurityUtil security = new SecurityUtil();
-	  String shaPassword = security.encryptSHA256(vo.getPassword());
-	  String encPassword;
-	  try {
-	    encPassword = ARIAUtil.ariaEncrypt(shaPassword);
-	    vo.setPassword(encPassword); // DB에는 암호화된 비밀번호 저장
-	  } catch (Exception e) {
-	    e.printStackTrace();
+	  String encPassword = encryptPassword(vo.getPassword());
+	  if (encPassword == null) {
 	    return "redirect:/message/passwordEncryptNoJoin";
 	  }
+	  vo.setPassword(encPassword); // DB에는 암호화된 비밀번호 저장
 	  
 	  // 4. 최종 회원정보 저장
 	  int res = userService.setUserJoinOk(vo);
@@ -142,17 +158,13 @@ public class UserController {
 		 * //ReCaptcha검증 boolean captchaSuccess = verifyRecaptcha(gRecaptchaResponse);
 		 * if (!captchaSuccess) { return "redirect:/message/reCaptchaNo"; }
 		 */
-	  
+
+
 	  //비밀번호 암호화
-	  SecurityUtil security = new SecurityUtil();
-	  String shaPassword = security.encryptSHA256(password);
-	  String encPassword;
-		try {
-			encPassword = ARIAUtil.ariaEncrypt(shaPassword);
-		} catch (InvalidKeyException | UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return "redirect:/message/passwordEncryptNoLogin";
-		}
+	  String encPassword = encryptPassword(password);
+	  if (encPassword == null) {
+	    return "redirect:/message/passwordEncryptNoLogin";
+	  }
 	  
 		//사용자 정보 조회 (로그인 실패 횟수 및 차단)
 	  UserVo vo = userService.getUserLoginCheck(email, encPassword);
@@ -220,39 +232,6 @@ public class UserController {
 		session.invalidate();
 		return "redirect:/message/userLogoutOk";
 	}
-	
-	
-	/*
-	public boolean verifyRecaptcha(String token) {
-	  String secretKey = System.getenv("RECAPTCHA_SECRET");
-	  String apiUrl = "https://www.google.com/recaptcha/api/siteverify";
-
-	  try {
-	    URL url = new URL(apiUrl);
-	    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-	    con.setRequestMethod("POST");
-	    con.setDoOutput(true);
-
-	    String postData = "secret=" + secretKey + "&response=" + token;
-	    OutputStream os = con.getOutputStream();
-	    os.write(postData.getBytes());
-	    os.flush();
-	    os.close();
-
-	    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	    StringBuilder res = new StringBuilder();
-	    String input;
-	    while ((input = in.readLine()) != null) res.append(input);
-	    in.close();
-
-	    JSONObject json = new JSONObject(res.toString());
-	    return json.getBoolean("success");
-	  } catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
-	  }
-	}
-	*/
 
 	// username 중복체크
 	@ResponseBody
@@ -366,17 +345,12 @@ public class UserController {
 	  String title = "[Blinkos] 임시 비밀번호 안내";
 	  String emailFlag = "임시 비밀번호: <b>" + tempPassword + "</b><br>로그인 후 반드시 비밀번호를 변경해주세요.";
 	  mailSend(email, title, emailFlag);
-		
-		SecurityUtil security = new SecurityUtil();
-		
-		String shaPassword = security.encryptSHA256(tempPassword);
-	  try {
-	    String encPassword = ARIAUtil.ariaEncrypt(shaPassword);
-	    vo.setPassword(encPassword);
-	  } catch (Exception e) {
-	    e.printStackTrace();
+
+	  String encPassword = encryptPassword(tempPassword);
+	  if (encPassword == null) {
 	    return "redirect:/message/passwordEncryptNoLogin";
 	  }
+	  vo.setPassword(encPassword);
 	  
 	  userService.updatePassword(vo);
 	  
@@ -395,38 +369,26 @@ public class UserController {
 	// 비밀번호 변경처리
 	@RequestMapping(value = "/passwordReset", method = RequestMethod.POST)
 	public String passwordResetPost(HttpSession session, String newPassword) {
-		
-		String email = (String) (session.getAttribute("sEmail"));
-		
-		System.out.println("session:" + session.getAttribute("sEmail"));
-		
-		UserVo vo = userService.getUserEmailCheck(email);
-		
-		System.out.println("newPassword = " + newPassword);
-		
-		SecurityUtil security = new SecurityUtil();
-		
-		String shaPassword = security.encryptSHA256(newPassword);
-		System.out.println("SHA 암호화 결과: " + shaPassword);
-		if (shaPassword == null || shaPassword.isEmpty()) {
-		  System.out.println("SHA 암호화 실패");
-		  return "redirect:/message/passwordEncryptNoMain";
-		}
 
-		String encPassword = null;
-		try {
-		  encPassword = ARIAUtil.ariaEncrypt(shaPassword);
-		  System.out.println("ARIA 암호화 결과: " + encPassword);
-		  vo.setPassword(encPassword);
-		} catch (Exception e) {
-		  e.printStackTrace();
-		  System.out.println("ARIA 암호화 중 예외 발생");
+		String email = (String) (session.getAttribute("sEmail"));
+
+		logger.debug("Password reset attempt for email: {}", email);
+
+		UserVo vo = userService.getUserEmailCheck(email);
+
+		logger.debug("New password received");
+
+		String encPassword = encryptPassword(newPassword);
+		if (encPassword == null) {
+		  logger.error("Password encryption failed");
 		  return "redirect:/message/passwordEncryptNoMain";
 		}
-	  
+		logger.debug("Password encryption completed");
+		vo.setPassword(encPassword);
+
 	  //바뀐 비밀번호 DB 저장
 	  int res = userService.updatePassword(vo);
-	  System.out.println("updatePassword 결과: " + res);
+	  logger.info("Password update result: {}", res);
 		if(res != 0) {
 			//임시비밀번호로 로그인 하여 강제로 여기 온 경우 세션 제거
 			if(session.getAttribute("isTempPassword") != null){
@@ -449,20 +411,16 @@ public class UserController {
 	public String passwordCheckPost(HttpSession session, String checkPassword, @PathVariable String passwordFlag) {
 		Integer user_id = (Integer) session.getAttribute("loginUser");
 		UserVo vo = userService.getUserByUser_id(user_id);
-	
+
 		// 암호화된 비밀번호와 비교
-    SecurityUtil security = new SecurityUtil();
-    String shaPassword = security.encryptSHA256(checkPassword);
-    try {
-        String encPassword = ARIAUtil.ariaEncrypt(shaPassword);
-        if (!encPassword.equals(vo.getPassword())) {
-            // 비밀번호 불일치 시 message 처리
-            return "redirect:/message/passwordCheckNo";
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "redirect:/message/passwordEncryptNoMain";
-    }
+		String encPassword = encryptPassword(checkPassword);
+		if (encPassword == null) {
+			return "redirect:/message/passwordEncryptNoMain";
+		}
+		if (!encPassword.equals(vo.getPassword())) {
+			// 비밀번호 불일치 시 message 처리
+			return "redirect:/message/passwordCheckNo";
+		}
     
     // 비밀번호 일치 → 플래그에 따라 이동 처리
     if (passwordFlag.equals("d")) {
@@ -505,7 +463,7 @@ public class UserController {
 	   //vo에 담기
 	   vo.setUsername(username);
 	   vo.setPhone_number(phone_number);
-	   System.out.println("vo : " + vo);
+	   logger.info("User update attempt: {}", vo);
 	   //DB 업데이트
 	   int res = userService.updateUser(vo);
 	
