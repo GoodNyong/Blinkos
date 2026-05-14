@@ -121,13 +121,6 @@ springProject1/
 └── pom.xml                             # Maven 설정
 ```
 
-## 🔒 보안 강화
-
-- **환경변수 분리**: 민감한 정보를 환경변수로 관리
-- **최신 라이브러리**: 보안 취약점이 해결된 최신 버전 사용
-- **암호화**: 비밀번호 SHA256 + ARIA 이중 암호화 저장
-- **세션 관리**: 안전한 세션 관리 및 자동 로그아웃
-
 ## 🔧 최근 코드 개선 사항
 
 ### 코드 품질 향상
@@ -158,44 +151,3 @@ springProject1/
 ### 문서화
 - JavaDoc 주석 추가
 - 메소드 설명 및 매개변수 문서화
-
-## ⚠️ 알려진 보안 권고사항
-
-다음 보안 개선을 권장합니다:
-
-1. **Spring Security 업그레이드**
-   - 현재: 4.2.3.RELEASE (2016)
-   - 권장: 5.8.x 또는 6.x
-   - 이유: 다수의 보안 취약점 패치 포함
-
-2. **비밀번호 해싱 개선**
-   - 현재: SHA-256 (해시 함수)
-   - 권장: BCrypt, SCrypt, PBKDF2
-   - 이유: Salt 기반 느린 해싱으로 레인보우 테이블 공격 방어
-
-3. **파일 업로드 검증**
-   - 파일 타입 검증 추가
-   - 파일 크기 제한 설정
-   - MIME 타입 확인
-
-4. **CSRF 보호 활성화**
-   - Spring Security CSRF 토큰 적용 권장
-
-## 🤝 기여하기
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 배포됩니다.
-
-## 📞 문의
-
-프로젝트 관련 문의사항이 있으시면 Issues를 통해 연락해 주세요.
-
----
-⭐ 이 프로젝트가 도움이 되었다면 Star를 눌러주세요!
